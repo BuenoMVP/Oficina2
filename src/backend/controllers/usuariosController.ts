@@ -44,6 +44,43 @@ const usuariosController = {
     }
   },
 
+  updateUsuario: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const usuario: usuariosProps = { ...req.body };
+
+      const novoUsuario = {
+        nome: usuario.nome,
+        email: usuario.email,
+        senha: usuario.senha
+      }
+
+      const objUsuario = await schemaUsuarios.findByIdAndUpdate(id, novoUsuario);
+
+      if (!objUsuario)
+        return res.status(404).json({ msg: "Usuário não encontrado!" });
+
+      res.status(200).json({ objUsuario, msg: "Usuário atualizado!" });
+    } catch (error) {
+      res.status(400).json({ "Erro ao atualizar usuário": error });
+    }
+  },
+
+  deleteUsuario: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const objUsuario = await schemaUsuarios.findByIdAndDelete(id);
+
+      if (!objUsuario)
+        return res.status(404).json({ msg: "Usuário não encontrado!" });
+
+      res.status(200).json({ objUsuario, msg: "Usuário deletado!" });
+    } catch (error) {
+      res.status(400).json({ "Erro ao deletar usuário": error });
+    }
+  },
+
   login: async (req: Request, res: Response) => {
     try {
       const { email, senha } = req.body;
