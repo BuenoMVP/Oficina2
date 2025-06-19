@@ -1,11 +1,12 @@
 import express, { Request, Response } from "express"
 import usuariosRouter from "./usuarios"
 import integrantesRouter from "./integrantes"
+import { verifyToken } from "../middlewares/authService"
 
 const router = express.Router()
 
 router.use('/usuarios', usuariosRouter)
-router.use('/integrantes', integrantesRouter)
+router.use('/integrantes', verifyToken, integrantesRouter)
 
 router.use('/', (_req: Request, res: Response) => {
     res.send('Página inicial da api')

@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import schemaUsuarios from "../models/Usuarios";
 import { usuariosProps } from "../types/bdTypes";
+import { createToken } from "../middlewares/authService";
+import { hash, compare } from "bcryptjs";
 
 const usuariosController = {
   postUsuario: async (req: Request, res: Response) => {
@@ -14,10 +16,12 @@ const usuariosController = {
       if (validUser.length > 0)
         return res.status(400).json({ msg: "Usuário já cadastrado!" });
 
+      const passwordHash = await hash(usuario.senha, 8);
+
       const novoUsuario = {
         nome: usuario.nome,
         email: usuario.email,
-        senha: usuario.senha
+        senha: passwordHash
       }
 
       const objUsuario = await schemaUsuarios.create(novoUsuario);
@@ -90,10 +94,14 @@ const usuariosController = {
       if (validUser.length <= 0)
         return res.status(404).json({ msg: "Usuário não encontrado!" });
 
-      if (senha  != validUser[0].senha)
-        return res.status(401).json({ msg: "Senha inválida!" });
+      const comparePassword = await compare(senha, validUser[0].senha);
 
-      res.status(200).json({ "Usuario logado": "Login efetuado com sucesso" });
+      if (!comparePassword)
+        return res.status(401).json({ msg: "Email ou senha inválidos!" });
+
+      const authToken = createToken(validUser[0]);
+
+      res.status(200).json({ "Usuario logado": "Login efetuado com sucesso", token: authToken });
     } catch (error) {
       res.status(400).json({ "Erro ao logar": error });
     }
