@@ -53,10 +53,12 @@ const usuariosController = {
       const { id } = req.params;
       const usuario: usuariosProps = { ...req.body };
 
+      const passwordHash = await hash(usuario.senha, 8);
+
       const novoUsuario = {
         nome: usuario.nome,
         email: usuario.email,
-        senha: usuario.senha
+        senha: passwordHash
       }
 
       const objUsuario = await schemaUsuarios.findByIdAndUpdate(id, novoUsuario);
