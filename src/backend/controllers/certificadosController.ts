@@ -5,14 +5,22 @@ import path from 'path';
 
 const certificadosController = {
     getCertificados: async (req: Request, res: Response) => {
-        const nome: string = req.body.nome;
+        const nome: string = req.body.nome.toUpperCase();
+        const projeto: string = req.body.projeto.toUpperCase();
         const horas: number = req.body.horas;
 
-        const text = `Certificamos que o(a) aluno(a) ${nome} 
-participou do curso do ELLP promovido pela UTFPR-CP, totalizando 
-${horas} horas de atividades.
+        const Data = new Date().toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        const text = `Certificamos que ${nome} foi voluntário(a) no projeto 
+${projeto}, promovido e realizado 
+pela Universidade Tecnológica Federal do Paraná - Campus Cornélio Procópio, 
+com carga horária de ${horas} horas.
                         
-Cornélio Procópio, Paraná.`;
+Cornélio Procópio, ${Data}.`;
 
         const templatePath = path.resolve(__dirname, '..', 'docs', 'template-certificado.pdf');
 
@@ -28,10 +36,10 @@ Cornélio Procópio, Paraná.`;
 
         page.drawText(text, {
             x: 150,
-            y: 370,
+            y: 300,
             size: 16,
             font,
-            color: rgb(28/255, 48/255, 85/255)
+            color: rgb(0, 0, 0)
         });
 
         const pdfBytes = await pdfDoc.save();
