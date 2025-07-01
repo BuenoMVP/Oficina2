@@ -7,9 +7,15 @@ interface usuariosProps {
 interface integrantesProps {
     nome: string;
     dataNascimento: string;
-    escola: string;
-    email: string;
     telefone: string;
+    cpf: string;
+    rg: string;
+    escola: string;
+    nomeResponsavel: string;
+    telefoneResponsavel: string;
+    emailResponsavel: string;
+    cpfResponsavel: string;
+    endereco: string;
 }
 
 export type { usuariosProps, integrantesProps };
