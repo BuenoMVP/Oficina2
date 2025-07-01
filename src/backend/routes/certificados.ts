@@ -3,7 +3,7 @@ import certificadosController from "../controllers/certificadosController"
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response) => {
+router.post('/', (req: Request, res: Response) => {
     certificadosController.getCertificados(req, res)
 })
 
