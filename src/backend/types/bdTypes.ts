@@ -4,6 +4,12 @@ interface usuariosProps {
     senha: string;
 }
 
+interface senhasProps {
+    email: string;
+    senhaResetToken: string;
+    senhaResetExpires: Date;
+}
+
 interface integrantesProps {
     nome: string;
     dataNascimento: string;
@@ -18,4 +24,4 @@ interface integrantesProps {
     endereco: string;
 }
 
-export type { usuariosProps, integrantesProps };
+export type { usuariosProps, integrantesProps, senhasProps };
